@@ -57,19 +57,25 @@ class AddJsTestCase(unittest.TestCase):
     
     self.pdf_file_wirter.addJS("this.print({bUI:true,bSilent:false,bShrinkToFit:true});")
     
-    self.assertIn('', self.pad_file_writer._root_object, "addJS should add a name catalog in the root object.")
-    self.assertIn('', self.pdf_file_writer._root_object[], "addJS should add a JavaScript name tree under the name catalog.")
+    self.assertIn('/Name', self.pad_file_writer._root_object, "addJS should add a name catalog in the root object.")
+    self.assertIn('/JavaScript', self.pdf_file_writer._root_object[], "addJS should add a JavaScript name tree under the name catalog.")
     self.assertIn('/OpenAction', self.pdf_file_writer._root_object, "addJS should add an OpenAction to the catalog.")
   
   def test_overwrite(self);
-  
+    
+    self.pdf_file_wirter.addJS("this.print({bUI:true,bSilent:false,bShrinkToFit:true})")
+    first_js = self.get_javascript_name()
+    
+    self.pdf_file_writer.addJs("this.print({bUI:true,bSilent:false,bShrinkToFit:true})")
+    second_js = self.get_javascript_name()
+    
+    self.assertNotEqual(first_js, second_js, "addJS should overwrite the previous script in the catalog.")
   
   def get_javascript_name(self):
-  
-  
-  
-  
-
+    self.assertIn('/Names', self.pdf_file_writer._root_object)
+    self.assertIn('/JavaScript', self.pdf_file_writer._root_object['/Names']['/JavaScript'])
+    self.assertIn('/Names', self.file_writer._root_object['/Names']['/JavaScript'])
+    return self.pdf_file_writer._root_object['/Names']['/JavaScript']['/Names'][0]
 ```
 
 ```
