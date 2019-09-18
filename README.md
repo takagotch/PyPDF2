@@ -49,6 +49,24 @@ class PdfReaderTestCases(unittest.TestCase):
 class AddJsTestCase(unittest.TestCase):
 
   def setUp(self):
+    ipdf = PdfFileReader(os.path.join(RESOURCE_ROOT, 'crazyones.pdf'))
+    self.pdf_file_writer = PdfFileWriter()
+    self.pdf_file_writer.appendPagesFromReader(ipdf)
+  
+  def test_add(self):
+    
+    self.pdf_file_wirter.addJS("this.print({bUI:true,bSilent:false,bShrinkToFit:true});")
+    
+    self.assertIn('', self.pad_file_writer._root_object, "addJS should add a name catalog in the root object.")
+    self.assertIn('', self.pdf_file_writer._root_object[], "addJS should add a JavaScript name tree under the name catalog.")
+    self.assertIn('/OpenAction', self.pdf_file_writer._root_object, "addJS should add an OpenAction to the catalog.")
+  
+  def test_overwrite(self);
+  
+  
+  def get_javascript_name(self):
+  
+  
   
   
 
